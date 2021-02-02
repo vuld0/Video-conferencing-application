@@ -9,4 +9,4 @@
 - Add the ability to create messages
 - Add mute button
 - Add Video button
-- Deploying the web-page
+- Deploying the web-page on Heroku
