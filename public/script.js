@@ -33,7 +33,7 @@ navigator.mediaDevices.getUserMedia({
   })
   // input value
   let text = $("input");
-  // when press enter send message
+  // when press enter send message and ignore if the message is empty
   $('html').keydown(function (e) {
     if (e.which == 13 && text.val().length !== 0) {
       socket.emit('message', text.val());
@@ -41,10 +41,11 @@ navigator.mediaDevices.getUserMedia({
       text.val('')
     }
   });
+  // Listening if server is sending any message
   socket.on("createMessage", message => {
     console.log(message);
-    $("ul").append(`<li class="message"><b>user</b><br/>${message}</li>`);
-    scrollToBottom()
+    $("ul").append(`<li class="message"><b>user</b><br/>${message}</li>`);  //Appending the message in the frontend
+    scrollToBottom()  //Automatically Scrolls to bottom as messages overflow
   })
 })
 
@@ -84,36 +85,37 @@ function addVideoStream(video, stream) {
 }
 
 
-
+//This function is used to automatically scroll as the messages in the chat window overflows
 const scrollToBottom = () => {
   var d = $('.main__chat_window');
   d.scrollTop(d.prop("scrollHeight"));
 }
 
-
+// Mute the video
 const muteUnmute = () => {
-  const enabled = myVideoStream.getAudioTracks()[0].enabled;
+  const enabled = myVideoStream.getAudioTracks()[0].enabled;  //Setting the audio tracks to enabled
   if (enabled) {
-    myVideoStream.getAudioTracks()[0].enabled = false;
+    myVideoStream.getAudioTracks()[0].enabled = false;  //If audio tracks enabled, We will disable it
     setUnmuteButton();
   } else {
     setMuteButton();
-    myVideoStream.getAudioTracks()[0].enabled = true;
+    myVideoStream.getAudioTracks()[0].enabled = true;   //If audio tracks not enabled, We will enable it
   }
 }
 
 const playStop = () => {
   console.log('object')
-  let enabled = myVideoStream.getVideoTracks()[0].enabled;
+  let enabled = myVideoStream.getVideoTracks()[0].enabled;  //Setting the video tracks to enabled
   if (enabled) {
-    myVideoStream.getVideoTracks()[0].enabled = false;
+    myVideoStream.getVideoTracks()[0].enabled = false;    //If video tracks enabled, We will disable it
     setPlayVideo()
   } else {
     setStopVideo()
-    myVideoStream.getVideoTracks()[0].enabled = true;
+    myVideoStream.getVideoTracks()[0].enabled = true;   //If video tracks not enabled, We will enable it
   }
 }
 
+//This function is used to change the innerHTML on the mute button to "MUTE"
 const setMuteButton = () => {
   const html = `
     <i class="fas fa-microphone"></i>
@@ -122,6 +124,7 @@ const setMuteButton = () => {
   document.querySelector('.main__mute_button').innerHTML = html;
 }
 
+//This function is used to change the innerHTML on the mute button to "UNMUTE"
 const setUnmuteButton = () => {
   const html = `
     <i class="unmute fas fa-microphone-slash"></i>
@@ -130,6 +133,7 @@ const setUnmuteButton = () => {
   document.querySelector('.main__mute_button').innerHTML = html;
 }
 
+//This function is used to change the innerHTML on the mute button to "STOP VIDEO"
 const setStopVideo = () => {
   const html = `
     <i class="fas fa-video"></i>
@@ -138,6 +142,7 @@ const setStopVideo = () => {
   document.querySelector('.main__video_button').innerHTML = html;
 }
 
+//This function is used to change the innerHTML on the mute button to "PLAY VIDEO"
 const setPlayVideo = () => {
   const html = `
   <i class="stop fas fa-video-slash"></i>
